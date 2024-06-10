@@ -23,7 +23,7 @@ tasks:
   run:
     desc: "Run the project"
     cmds:
-      - ./build/raylib_test
+      - ./build/launch_party
     depends: [build]
 
   watch:

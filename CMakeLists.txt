@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(raylib_test)
+project(launch_party)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -25,10 +25,10 @@ include_directories(raylib-cpp/include)
 # Automatically include all .cpp files in the project directory
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
-add_executable(raylib_test ${SOURCES})
+add_executable(launch_party ${SOURCES})
 
 if (CMAKE_CROSSCOMPILING)
-    target_link_libraries(raylib_test raylib winmm)
+    target_link_libraries(launch_party raylib winmm)
 else()
-    target_link_libraries(raylib_test raylib)
+    target_link_libraries(launch_party raylib)
 endif()
