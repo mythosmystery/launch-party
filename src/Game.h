@@ -10,8 +10,8 @@ struct Game {
   void draw();
   void update();
 
-  raylib::Color backgroundColor = RAYWHITE;
-  std::unique_ptr<raylib::Window> window;
+  raylib::Color backgroundColor = raylib::Color{115, 145, 250, 255};
 
-  Player player;
+  std::unique_ptr<raylib::Window> window;
+  std::unique_ptr<Player> player;
 };

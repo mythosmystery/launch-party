@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Constants.h"
+#include "raylib.h"
 
 Game::Game() {
   // Initialization
@@ -10,22 +11,26 @@ Game::Game() {
 
   SetTargetFPS(60);
 
-  this->player = Player();
+  this->player = std::make_unique<Player>();
   this->window = std::move(window);
 }
 
 void Game::draw() {
   // Draw the game
   BeginDrawing();
+  {
+    this->backgroundColor.ClearBackground();
+    BeginMode2D(this->player->getCamera());
 
-  this->backgroundColor.ClearBackground();
+    this->player->draw();
+    DrawRectangle(0, GetRenderHeight(), GetRenderWidth(), 100, BLACK);
 
-  this->player.draw();
-
+    EndMode2D();
+  }
   EndDrawing();
 }
 
 void Game::update() {
   // Update the game
-  this->player.update();
+  this->player->update();
 }

@@ -4,11 +4,21 @@
 Player::Player() {
   this->position = SCREEN_CENTER;
   this->speed = raylib::Vector2{0.0f, 0.0f};
+  this->camera.zoom = 1.0f;
+  this->camera.target = this->position;
+  this->camera.offset = raylib::Vector2{0, 0};
 }
 
-void Player::draw() {
-  DrawRectangleV(this->position, raylib::Vector2{50.0f, 50.0f}, RED);
+raylib::Rectangle Player::getBounds() {
+  return raylib::Rectangle{this->position.x, this->position.y, PLAYER_SIZE,
+                           PLAYER_SIZE};
 }
+
+bool Player::collidesWith(GameObject *other) {
+  return CheckCollisionRecs(this->getBounds(), other->getBounds());
+}
+
+void Player::draw() { DrawRectangleRec(this->getBounds(), RED); }
 
 void Player::update() {
   this->handleCollision();
@@ -17,6 +27,34 @@ void Player::update() {
 
   this->position.x += this->speed.x;
   this->position.y += this->speed.y;
+
+  this->updateCamera();
+}
+
+void Player::updateCamera() {
+  static Vector2 bbox = {0.2f, 0.2f};
+  int width = GetRenderWidth();
+  int height = GetRenderHeight();
+
+  Vector2 bboxWorldMin = GetScreenToWorld2D(
+      (Vector2){(1 - bbox.x) * 0.5f * width, (1 - bbox.y) * 0.5f * height},
+      this->camera);
+  Vector2 bboxWorldMax = GetScreenToWorld2D(
+      (Vector2){(1 + bbox.x) * 0.5f * width, (1 + bbox.y) * 0.5f * height},
+      this->camera);
+  this->camera.offset =
+      (Vector2){(1 - bbox.x) * 0.5f * width, (1 - bbox.y) * 0.5f * height};
+
+  if (this->getPosition().x < bboxWorldMin.x)
+    this->camera.target.x = this->getPosition().x;
+  if (this->getPosition().y < bboxWorldMin.y)
+    this->camera.target.y = this->getPosition().y;
+  if (this->getPosition().x > bboxWorldMax.x)
+    this->camera.target.x =
+        bboxWorldMin.x + (this->getPosition().x - bboxWorldMax.x);
+  if (this->getPosition().y > bboxWorldMax.y)
+    this->camera.target.y =
+        bboxWorldMin.y + (this->getPosition().y - bboxWorldMax.y);
 }
 
 void Player::handleInput() {
@@ -56,8 +94,8 @@ void Player::handleFriction() {
 }
 
 void Player::handleCollision() {
-  if (this->position.y >= GetRenderHeight() - 50) {
-    this->position.y = GetRenderHeight() - 50;
+  if (this->position.y >= GetRenderHeight() - PLAYER_SIZE) {
+    this->position.y = GetRenderHeight() - PLAYER_SIZE;
     this->speed.y = 0;
     this->isGrounded = true;
     this->jumps = 2;
