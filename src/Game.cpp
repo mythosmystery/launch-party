@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "Constants.h"
+#include "Ground.h"
+#include "Platform.h"
 #include "raylib.h"
 
 Game::Game() {
@@ -13,6 +15,11 @@ Game::Game() {
 
   this->player = std::make_unique<Player>();
   this->window = std::move(window);
+
+  this->gameObjects.push_back(std::make_unique<Ground>());
+  this->gameObjects.push_back(std::make_unique<Platform>(
+      raylib::Vector2{600, 600}, raylib::Vector2{200, 50},
+      raylib::Color{255, 0, 0, 255}));
 }
 
 void Game::draw() {
@@ -23,7 +30,10 @@ void Game::draw() {
     BeginMode2D(this->player->getCamera());
 
     this->player->draw();
-    DrawRectangle(0, GetRenderHeight(), GetRenderWidth(), 100, BLACK);
+
+    for (auto &gameObject : this->gameObjects) {
+      gameObject->draw();
+    }
 
     EndMode2D();
   }
@@ -32,5 +42,9 @@ void Game::draw() {
 
 void Game::update() {
   // Update the game
+  for (auto &gameObject : this->gameObjects) {
+    gameObject->update();
+    this->player->collidesWith(gameObject.get());
+  }
   this->player->update();
 }

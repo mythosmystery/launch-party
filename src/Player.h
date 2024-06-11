@@ -12,8 +12,6 @@ public:
 
   bool collidesWith(GameObject *other) override;
 
-  raylib::Vector2 getPosition() override { return this->position; }
-  raylib::Vector2 getSpeed() override { return this->speed; }
   raylib::Rectangle getBounds() override;
 
   void handleInput();
@@ -30,4 +28,5 @@ private:
   raylib::Camera2D camera;
   bool isGrounded = false;
   int jumps = 2;
+  GO_Types type = GO_Types::Player;
 };

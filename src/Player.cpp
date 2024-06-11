@@ -15,13 +15,29 @@ raylib::Rectangle Player::getBounds() {
 }
 
 bool Player::collidesWith(GameObject *other) {
-  return CheckCollisionRecs(this->getBounds(), other->getBounds());
+  bool collides = CheckCollisionRecs(this->getBounds(), other->getBounds());
+  if (!collides) {
+    this->isGrounded = false;
+    return false;
+  }
+
+  if (other->getBounds().y <= this->position.y - PLAYER_SIZE)
+    return collides;
+
+  this->position.y = other->getBounds().y - PLAYER_SIZE;
+  this->speed.y = 0;
+
+  if (other->getType() == GO_Types::Standable) {
+    this->isGrounded = true;
+    this->jumps = 2;
+  }
+
+  return collides;
 }
 
 void Player::draw() { DrawRectangleRec(this->getBounds(), RED); }
 
 void Player::update() {
-  this->handleCollision();
   this->clampSpeed();
   this->handleInput();
 
