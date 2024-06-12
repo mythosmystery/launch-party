@@ -1,11 +1,10 @@
 #include "Game.h"
-#include "raylib-cpp.hpp"
 
 int main() {
   Game game;
 
   // Main game loop
-  while (!game.window->ShouldClose()) {
+  while (!WindowShouldClose()) {
     // Draw
     game.draw();
 

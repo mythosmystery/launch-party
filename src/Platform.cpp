@@ -1,15 +1,14 @@
 #include "Platform.h"
 
-Platform::Platform(raylib::Vector2 position, raylib::Vector2 size,
-                   raylib::Color color) {
+Platform::Platform(Vector2 position, Vector2 size, Color color) {
   this->position = position;
   this->size = size;
   this->color = color;
 }
 
-raylib::Rectangle Platform::getBounds() {
-  return raylib::Rectangle{this->position.x, this->position.y, this->size.x,
-                           this->size.y};
+Rectangle Platform::getBounds() {
+  return Rectangle{this->position.x, this->position.y, this->size.x,
+                   this->size.y};
 }
 
 void Platform::draw() { DrawRectangleRec(this->getBounds(), this->color); }

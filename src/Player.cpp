@@ -3,15 +3,15 @@
 
 Player::Player() {
   this->position = SCREEN_CENTER;
-  this->speed = raylib::Vector2{0.0f, 0.0f};
+  this->speed = Vector2{0.0f, 0.0f};
   this->camera.zoom = 1.0f;
   this->camera.target = this->position;
-  this->camera.offset = raylib::Vector2{0, 0};
+  this->camera.offset = Vector2{0, 0};
 }
 
-raylib::Rectangle Player::getBounds() {
-  return raylib::Rectangle{this->position.x, this->position.y, PLAYER_SIZE,
-                           PLAYER_SIZE};
+Rectangle Player::getBounds() {
+  return Rectangle{this->position.x, this->position.y, PLAYER_SIZE,
+                   PLAYER_SIZE};
 }
 
 bool Player::collidesWith(GameObject *other) {
@@ -21,7 +21,7 @@ bool Player::collidesWith(GameObject *other) {
     return false;
   }
 
-  if (other->getBounds().y <= this->position.y - PLAYER_SIZE)
+  if (other->getBounds().y <= this->position.y)
     return collides;
 
   this->position.y = other->getBounds().y - PLAYER_SIZE;

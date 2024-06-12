@@ -9,7 +9,7 @@ public:
   void draw() override;
   void update() override;
 
-  raylib::Rectangle getBounds() override;
+  Rectangle getBounds() override;
 
   bool collidesWith(GameObject *other) override { return false; }
 

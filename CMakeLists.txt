@@ -15,12 +15,9 @@ if (CMAKE_CROSSCOMPILING)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
 endif()
 
-add_subdirectory(raylib-cpp)
-
 set(raylib_DIR /opt/raylib-windows/cmake)
 
 find_package(raylib REQUIRED)
-include_directories(raylib-cpp/include)
 
 # Automatically include all .cpp files in the project directory
 file(GLOB_RECURSE SOURCES "src/*.cpp")
