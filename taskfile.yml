@@ -23,7 +23,7 @@ tasks:
   run:
     desc: "Run the project"
     cmds:
-      - ./build/launch_party
+      - ./build/LaunchParty
     depends: [build]
 
   watch:
