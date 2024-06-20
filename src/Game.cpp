@@ -41,7 +41,10 @@ void Game::update() {
   // Update the game
   for (auto &gameObject : this->gameObjects) {
     gameObject->update();
-    this->player->collidesWith(gameObject.get());
+    bool collides = this->player->collidesWith(gameObject.get());
+    if (collides) {
+      this->player->setCollidedObject(gameObject.get());
+    }
   }
   this->player->update();
 }

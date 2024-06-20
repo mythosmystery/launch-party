@@ -15,4 +15,6 @@ struct Game {
   std::unique_ptr<Player> player;
 
   std::vector<std::unique_ptr<GameObject>> gameObjects;
+
+  float dt = 0;
 };

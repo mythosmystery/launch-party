@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Constants.h"
+#include "GameObject.h"
 
 Player::Player() {
   this->position = SCREEN_CENTER;
@@ -16,21 +17,6 @@ Rectangle Player::getBounds() {
 
 bool Player::collidesWith(GameObject *other) {
   bool collides = CheckCollisionRecs(this->getBounds(), other->getBounds());
-  if (!collides) {
-    this->isGrounded = false;
-    return false;
-  }
-
-  if (other->getBounds().y <= this->position.y)
-    return collides;
-
-  this->position.y = other->getBounds().y - PLAYER_SIZE;
-  this->speed.y = 0;
-
-  if (other->getType() == GO_Types::Standable) {
-    this->isGrounded = true;
-    this->jumps = 2;
-  }
 
   return collides;
 }
@@ -40,6 +26,9 @@ void Player::draw() { DrawRectangleRec(this->getBounds(), RED); }
 void Player::update() {
   this->clampSpeed();
   this->handleInput();
+  this->handleFriction();
+  this->handleGravity();
+  this->handleCollision();
 
   this->position.x += this->speed.x;
   this->position.y += this->speed.y;
@@ -88,9 +77,6 @@ void Player::handleInput() {
   } else if (IsKeyDown(KEY_LEFT)) {
     this->speed.x -= accel;
   }
-
-  this->handleFriction();
-  this->handleGravity();
 }
 
 void Player::handleGravity() {
@@ -110,11 +96,16 @@ void Player::handleFriction() {
 }
 
 void Player::handleCollision() {
-  if (this->position.y >= GetRenderHeight() - PLAYER_SIZE) {
-    this->position.y = GetRenderHeight() - PLAYER_SIZE;
-    this->speed.y = 0;
-    this->isGrounded = true;
-    this->jumps = 2;
+  if (this->collidedObject != nullptr) {
+    if (this->collidedObject->getType() == GO_Types::Standable) {
+      this->isGrounded = true;
+      this->jumps = 2;
+      this->speed.y = 0;
+      this->position.y = this->collidedObject->getBounds().y - PLAYER_SIZE;
+    }
+    this->collidedObject = nullptr;
+  } else {
+    this->isGrounded = false;
   }
 }
 
