@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Constants.h"
 #include "GameObject.h"
+#include "raylib.h"
 
 Player::Player() {
   this->position = SCREEN_CENTER;
@@ -16,10 +17,23 @@ Rectangle Player::getBounds() {
 }
 
 bool Player::collidesWith(GameObject *other) {
-  bool collides = CheckCollisionRecs(this->getBounds(), other->getBounds());
+  Vector2 otherPos = other->getPosition();
+  Vector2 otherSize = {other->getBounds().width, other->getBounds().height};
 
-  return collides;
+  return otherPos.x <= this->position.x &&
+         otherPos.x + otherSize.x >= this->position.x &&
+         otherPos.y >= this->position.y &&
+         otherPos.y <= this->position.y + this->speed.y;
 }
+
+void Player::handleCollision(GameObject *other) {
+  this->isGrounded = true;
+  this->jumps = 2;
+  this->speed.y = 0;
+  this->position.y = other->getPosition().y - PLAYER_SIZE;
+}
+
+void Player::handleFall() { this->isGrounded = false; }
 
 void Player::draw() { DrawRectangleRec(this->getBounds(), RED); }
 
@@ -28,10 +42,9 @@ void Player::update() {
   this->handleInput();
   this->handleFriction();
   this->handleGravity();
-  this->handleCollision();
 
-  this->position.x += this->speed.x;
-  this->position.y += this->speed.y;
+  this->position.x += this->speed.x * GetFrameTime();
+  this->position.y += this->speed.y * GetFrameTime();
 
   this->updateCamera();
 }
@@ -95,20 +108,6 @@ void Player::handleFriction() {
   }
 }
 
-void Player::handleCollision() {
-  if (this->collidedObject != nullptr) {
-    if (this->collidedObject->getType() == GO_Types::Standable) {
-      this->isGrounded = true;
-      this->jumps = 2;
-      this->speed.y = 0;
-      this->position.y = this->collidedObject->getBounds().y - PLAYER_SIZE;
-    }
-    this->collidedObject = nullptr;
-  } else {
-    this->isGrounded = false;
-  }
-}
-
 void Player::clampSpeed() {
   if (this->isGrounded) {
     if (this->speed.x > PLAYER_GROUND_SPEED) {
@@ -122,5 +121,9 @@ void Player::clampSpeed() {
     } else if (this->speed.x < -PLAYER_AIR_SPEED) {
       this->speed.x = -PLAYER_AIR_SPEED;
     }
+  }
+
+  if (this->speed.x < 0.3f && this->speed.x > -0.3f) {
+    this->speed.x = 0;
   }
 }

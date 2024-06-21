@@ -10,6 +10,8 @@ public:
 
   Rectangle getBounds() override;
 
+  Rectangle getCollisionBounds();
+
   bool collidesWith(GameObject *other) override { return false; }
 
 private:

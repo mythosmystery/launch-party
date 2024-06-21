@@ -11,6 +11,10 @@ Rectangle Platform::getBounds() {
                    this->size.y};
 }
 
+Rectangle Platform::getCollisionBounds() {
+  return Rectangle{this->position.x, this->position.y, this->size.x, 1};
+}
+
 void Platform::draw() { DrawRectangleRec(this->getBounds(), this->color); }
 
 void Platform::update() {

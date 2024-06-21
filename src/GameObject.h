@@ -12,6 +12,7 @@ public:
   virtual Rectangle getBounds() = 0;
   virtual bool collidesWith(GameObject *other) = 0;
 
+  Rectangle getCollisionBounds() { return this->getBounds(); };
   GO_Types getType() { return this->type; }
   Vector2 getPosition() { return this->position; }
   Vector2 getSpeed() { return this->speed; }
