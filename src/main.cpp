@@ -5,8 +5,6 @@ int main() {
 
   // Main game loop
   while (!WindowShouldClose()) {
-    game.dt = GetFrameTime();
-
     // Draw
     game.draw();
 
