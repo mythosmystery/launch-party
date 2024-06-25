@@ -7,13 +7,13 @@ const int SCREEN_HEIGHT = 640;
 
 const float PLAYER_SIZE = 100.0f;
 
-const float GRAVITY = 2.5f;
-const float JUMP_FORCE = -35.0f;
-const float DOUBLE_JUMP_FORCE = -43.0f;
-const float PLAYER_GROUND_SPEED = 18.0f;
-const float PLAYER_AIR_SPEED = 19.0f;
-const float PLAYER_ACCELERATION = 1.2f;
-const float PLAYER_AIR_ACCELERATION = 3.2f;
-const float PLAYER_FRICTION = 0.65f;
+const float GRAVITY = 200.0f;
+const float JUMP_FORCE = -550.0f;
+const float DOUBLE_JUMP_FORCE = -630.0f;
+const float PLAYER_GROUND_SPEED = 180.0f;
+const float PLAYER_AIR_SPEED = 190.0f;
+const float PLAYER_ACCELERATION = 10.2f;
+const float PLAYER_AIR_ACCELERATION = 30.2f;
+const float PLAYER_FRICTION = 6.5f;
 
 const Vector2 SCREEN_CENTER = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};

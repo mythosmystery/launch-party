@@ -23,7 +23,7 @@ bool Player::collidesWith(GameObject *other) {
   return otherPos.x <= this->position.x &&
          otherPos.x + otherSize.x >= this->position.x &&
          otherPos.y >= this->position.y &&
-         otherPos.y <= this->position.y + this->speed.y;
+         otherPos.y <= this->position.y + (this->speed.y * GetFrameTime());
 }
 
 void Player::handleCollision(GameObject *other) {
@@ -94,7 +94,7 @@ void Player::handleInput() {
 
 void Player::handleGravity() {
   if (!this->isGrounded) {
-    this->speed.y += GRAVITY;
+    this->speed.y += GRAVITY * GetFrameTime();
   }
 }
 
